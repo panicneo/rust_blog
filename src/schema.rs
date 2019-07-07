@@ -48,9 +48,4 @@ joinable!(posts -> accounts (author_id));
 joinable!(posts -> categories (category_id));
 joinable!(tags -> posts (post_id));
 
-allow_tables_to_appear_in_same_query!(
-    accounts,
-    categories,
-    posts,
-    tags,
-);
+allow_tables_to_appear_in_same_query!(accounts, categories, posts, tags,);
