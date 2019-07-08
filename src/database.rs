@@ -16,7 +16,6 @@ pub fn init_db_pool() -> DbAddr {
     let manager = ConnectionManager::<PgConnection>::new(db_url);
     let cpu_num = num_cpus::get();
     let pool_num = std::cmp::max(10, cpu_num * 2 + 1) as u32;
-    // p_num subject to c_num??
     let conn = Pool::builder()
         .max_size(pool_num)
         .build(manager)

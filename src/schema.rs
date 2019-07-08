@@ -8,7 +8,7 @@ table! {
         intro -> Text,
         permission -> Int2,
         created_at -> Timestamptz,
-        updated_at -> Timestamptz,
+        updated_at -> Nullable<Timestamptz>,
     }
 }
 
@@ -17,7 +17,7 @@ table! {
         id -> Int8,
         name -> Varchar,
         created_at -> Timestamptz,
-        updated_at -> Timestamptz,
+        updated_at -> Nullable<Timestamptz>,
     }
 }
 
@@ -29,7 +29,7 @@ table! {
         title -> Varchar,
         content -> Text,
         created_at -> Timestamptz,
-        updated_at -> Timestamptz,
+        updated_at -> Nullable<Timestamptz>,
     }
 }
 
@@ -39,7 +39,7 @@ table! {
         post_id -> Int8,
         name -> Varchar,
         created_at -> Timestamptz,
-        updated_at -> Timestamptz,
+        updated_at -> Nullable<Timestamptz>,
     }
 }
 

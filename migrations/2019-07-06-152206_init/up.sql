@@ -8,7 +8,7 @@ CREATE TABLE "public"."accounts"
     "intro"      TEXT         NOT NULL DEFAULT '',
     "permission" INT2         NOT NULL DEFAULT 0,
     "created_at" TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMPTZ  NOT NULL
+    "updated_at" TIMESTAMPTZ
 );
 SELECT diesel_manage_updated_at('accounts');
 COMMENT ON TABLE "public"."accounts" IS '账户';
@@ -26,7 +26,7 @@ CREATE TABLE "public"."categories"
     "id"         SERIAL8      NOT NULL PRIMARY KEY,
     "name"       VARCHAR(255) NOT NULL,
     "created_at" TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMPTZ  NOT NULL
+    "updated_at" TIMESTAMPTZ
 );
 SELECT diesel_manage_updated_at('categories');
 COMMENT ON TABLE "public"."categories" IS '文章分类';
@@ -42,7 +42,7 @@ CREATE TABLE "public"."posts"
     "title"       VARCHAR(255) NOT NULL,
     "content"     TEXT         NOT NULL DEFAULT '',
     "created_at"  TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at"  TIMESTAMPTZ  NOT NULL
+    "updated_at"  TIMESTAMPTZ
 );
 SELECT diesel_manage_updated_at('posts');
 COMMENT ON TABLE "public"."posts" IS '文章';
@@ -59,7 +59,7 @@ CREATE TABLE "public"."tags"
     "post_id"    SERIAL8      NOT NULL REFERENCES public.posts (id),
     "name"       VARCHAR(255) NOT NULL,
     "created_at" TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMPTZ  NOT NULL
+    "updated_at" TIMESTAMPTZ
 );
 SELECT diesel_manage_updated_at('tags');
 COMMENT ON TABLE "public"."tags" IS '标签';
