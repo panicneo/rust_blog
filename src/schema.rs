@@ -1,11 +1,10 @@
 table! {
     accounts (id) {
-        id -> Uuid,
-        username -> Varchar,
+        id -> Int8,
+        email -> Varchar,
         password -> Varchar,
         nickname -> Varchar,
         avatar -> Varchar,
-        email -> Varchar,
         intro -> Text,
         permission -> Int2,
         created_at -> Timestamptz,
@@ -15,7 +14,7 @@ table! {
 
 table! {
     categories (id) {
-        id -> Uuid,
+        id -> Int8,
         name -> Varchar,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -24,9 +23,9 @@ table! {
 
 table! {
     posts (id) {
-        id -> Uuid,
-        author_id -> Uuid,
-        category_id -> Uuid,
+        id -> Int8,
+        author_id -> Int8,
+        category_id -> Int8,
         title -> Varchar,
         content -> Text,
         created_at -> Timestamptz,
@@ -36,8 +35,8 @@ table! {
 
 table! {
     tags (id) {
-        id -> Uuid,
-        post_id -> Uuid,
+        id -> Int8,
+        post_id -> Int8,
         name -> Varchar,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,

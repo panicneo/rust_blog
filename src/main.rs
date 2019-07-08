@@ -8,8 +8,11 @@ use actix_web::{web, App, HttpServer};
 
 mod api;
 mod database;
+mod errors;
 mod logger;
+mod models;
 mod schema;
+mod services;
 
 fn main() -> std::io::Result<()> {
     logger::init().unwrap_or_default();
@@ -23,13 +26,11 @@ fn main() -> std::io::Result<()> {
             .data(addr.clone())
             .wrap(Logger::default())
             .wrap(Cors::default())
-            .service(
-                scope("/api").service(
-                    resource("hello")
-                        .route(web::get().to_async(api::account::new))
-                        .route(web::post().to_async(api::account::new)),
+            .service(scope("/api").service(
+                scope("auth").service(
+                    resource("sign_up").route(web::post().to_async(api::account::sign_up)),
                 ),
-            )
+            ))
     })
     .bind(&bind_host)
     .expect("Can not bind to host")
