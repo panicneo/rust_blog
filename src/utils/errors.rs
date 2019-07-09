@@ -3,6 +3,7 @@ use actix_web::{error::ResponseError, HttpResponse};
 use derive_more::Display;
 use diesel::r2d2::PoolError;
 use diesel::result::{DatabaseErrorKind, Error as DieselError};
+use harsh::Error as HarshError;
 use jsonwebtoken::errors::{Error as JwtError, ErrorKind as JwtErrorKind};
 use std::convert::From;
 
@@ -78,6 +79,22 @@ impl From<JwtError> for ServiceError {
             JwtErrorKind::InvalidToken => ServiceError::BadRequest("Invalid Token".into()),
             JwtErrorKind::InvalidIssuer => ServiceError::BadRequest("Invalid Issuer".into()),
             _ => ServiceError::Unauthorized,
+        }
+    }
+}
+
+impl From<HarshError> for ServiceError {
+    fn from(error: HarshError) -> Self {
+        match error {
+            HarshError::AlphabetLength => {
+                ServiceError::InternalServerError("harsh AlphabetLength error".into())
+            }
+            HarshError::IllegalCharacter(_) => {
+                ServiceError::InternalServerError("harsh IllegalCharacter error".into())
+            }
+            HarshError::Separator => {
+                ServiceError::InternalServerError("harsh Separator error".into())
+            }
         }
     }
 }

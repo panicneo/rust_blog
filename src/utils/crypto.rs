@@ -71,3 +71,18 @@ pub fn decode_token(token: &str) -> Result<i64, ServiceError> {
         .map(|data| Ok(data.claims.uid))
         .map_err(|_err| ServiceError::Unauthorized)?
 }
+
+pub fn hashid_encode(id: i64) -> Result<String, ServiceError> {
+    let harsher = harsh::HarshBuilder::new().init()?;
+    harsher
+        .encode(&[id as u64])
+        .ok_or_else(|| ServiceError::InternalServerError("harsh encode".into()))
+}
+
+pub fn hashid_decode(hash_id: &str) -> Result<i64, ServiceError> {
+    let harsher = harsh::HarshBuilder::new().init()?;
+    harsher
+        .decode(hash_id)
+        .map(|vec| vec[0] as i64)
+        .ok_or_else(|| ServiceError::InternalServerError("harsh decode".into()))
+}
