@@ -1,12 +1,10 @@
 use actix::MailboxError;
 use actix_web::{error::ResponseError, HttpResponse};
-use base64::DecodeError;
 use derive_more::Display;
 use diesel::r2d2::PoolError;
 use diesel::result::{DatabaseErrorKind, Error as DieselError};
 use jsonwebtoken::errors::{Error as JwtError, ErrorKind as JwtErrorKind};
 use std::convert::From;
-use uuid::parser::ParseError;
 
 #[derive(Debug, Display)]
 pub enum ServiceError {
@@ -47,13 +45,6 @@ impl From<MailboxError> for ServiceError {
     }
 }
 
-// uuid parse error
-impl From<ParseError> for ServiceError {
-    fn from(_: ParseError) -> ServiceError {
-        ServiceError::BadRequest("Invalid UUID".into())
-    }
-}
-
 impl From<DieselError> for ServiceError {
     fn from(error: DieselError) -> ServiceError {
         // Right now we just care about UniqueViolation from diesel
@@ -77,13 +68,6 @@ impl From<DieselError> for ServiceError {
 impl From<PoolError> for ServiceError {
     fn from(_error: PoolError) -> Self {
         ServiceError::InternalServerError("pool".into())
-    }
-}
-
-// Base64 decode
-impl From<DecodeError> for ServiceError {
-    fn from(_error: DecodeError) -> Self {
-        ServiceError::BadRequest("Invalid Base64 Code".into())
     }
 }
 

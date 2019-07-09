@@ -1,3 +1,4 @@
+use crate::utils::config;
 use actix::{Actor, Addr, SyncArbiter, SyncContext};
 use diesel::r2d2::ConnectionManager;
 use diesel::PgConnection;
@@ -12,7 +13,7 @@ impl Actor for DbPool {
 pub type DbAddr = Addr<DbPool>;
 
 pub fn init_db_pool() -> DbAddr {
-    let db_url = dotenv::var("DATABASE_URL").unwrap_or_else(|_| "DATABASE_URL must be set".into());
+    let db_url: String = config::must_get("DATABASE_URL");
     let manager = ConnectionManager::<PgConnection>::new(db_url);
     let cpu_num = num_cpus::get();
     let pool_num = std::cmp::max(10, cpu_num * 2 + 1) as u32;

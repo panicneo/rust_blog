@@ -1,5 +1,4 @@
 pub mod account;
-pub mod msg;
 pub mod post;
 
 use actix_web::Error;

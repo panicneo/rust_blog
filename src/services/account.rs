@@ -1,18 +1,9 @@
 use crate::database::DbPool;
-use crate::errors::ServiceError;
 use crate::models::account::{Account, AccountItem, AccountSignIn, AccountSignUp};
+use crate::utils::crypto::{hash_password, verify_password};
+use crate::utils::errors::ServiceError;
 use actix::Handler;
-use bcrypt::DEFAULT_COST;
 use diesel::prelude::*;
-
-pub fn hash_password(plain: &str) -> Result<String, ServiceError> {
-    let cost: u32 = match dotenv::var("HASH_ROUNDS") {
-        Ok(cost) => cost.parse().unwrap_or(5),
-        _ => 5,
-    };
-    bcrypt::hash(plain, cost)
-        .map_err(|_| ServiceError::InternalServerError("hash error".to_string()))
-}
 
 impl Handler<AccountSignUp> for DbPool {
     type Result = Result<AccountItem, ServiceError>;
@@ -39,9 +30,11 @@ impl Handler<AccountSignIn> for DbPool {
             .filter(email.eq(&msg.email))
             .get_result::<Account>(conn)?;
         let hashed = hash_password(&msg.password)?;
-        match bcrypt::verify(&msg.password, &hashed) {
-            Ok(_) => Ok(AccountItem::from(account)),
-            Err(_) => Err(ServiceError::BadRequest("auth error".to_string())),
+        let checked = verify_password(&hashed, &msg.password)?;
+        if checked {
+            Ok(AccountItem::from(account))
+        } else {
+            Err(ServiceError::BadRequest("auth error".to_string()))
         }
     }
 }
