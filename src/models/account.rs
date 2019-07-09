@@ -1,4 +1,5 @@
 use crate::schema::accounts;
+use crate::utils::crypto::hashid_encode;
 use crate::utils::errors::ServiceError;
 use actix::Message;
 use chrono::NaiveDateTime;
@@ -22,7 +23,7 @@ pub struct Account {
 // 账户信息（客户端展示用）
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AccountItem {
-    pub id: i64,
+    pub id: String,
     pub nickname: String,
     pub avatar: String,
     pub email: String,
@@ -33,7 +34,7 @@ pub struct AccountItem {
 impl From<Account> for AccountItem {
     fn from(account: Account) -> Self {
         AccountItem {
-            id: account.id,
+            id: hashid_encode(account.id).unwrap(),
             nickname: account.nickname,
             avatar: account.avatar,
             email: account.email,

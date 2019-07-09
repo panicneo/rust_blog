@@ -73,14 +73,20 @@ pub fn decode_token(token: &str) -> Result<i64, ServiceError> {
 }
 
 pub fn hashid_encode(id: i64) -> Result<String, ServiceError> {
-    let harsher = harsh::HarshBuilder::new().init()?;
+    let harsher = harsh::HarshBuilder::new()
+        .salt(SECRET_KEY.as_ref() as &str)
+        .length(10)
+        .init()?;
     harsher
         .encode(&[id as u64])
         .ok_or_else(|| ServiceError::InternalServerError("harsh encode".into()))
 }
 
 pub fn hashid_decode(hash_id: &str) -> Result<i64, ServiceError> {
-    let harsher = harsh::HarshBuilder::new().init()?;
+    let harsher = harsh::HarshBuilder::new()
+        .salt(SECRET_KEY.as_ref() as &str)
+        .length(10)
+        .init()?;
     harsher
         .decode(hash_id)
         .map(|vec| vec[0] as i64)
