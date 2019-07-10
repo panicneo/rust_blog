@@ -19,7 +19,7 @@ pub fn init() -> Result<(), fern::InitError> {
             ))
         })
         .chain(console_logger)
-        .chain(file_logger)
+        //        .chain(file_logger)
         .apply()?;
     Ok(())
 }

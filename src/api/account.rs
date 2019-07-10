@@ -1,11 +1,10 @@
 use crate::database::DbAddr;
 use crate::models::account::{AccountSignIn, AccountSignInResp, AccountSignUp};
-use crate::utils::crypto::hashid;
-use crate::utils::crypto::jwt;
+use crate::utils::crypto::{hashid, jwt};
 use crate::utils::errors::ServiceError;
-use actix_identity::Identity;
 use actix_web::dev::Payload;
 use actix_web::error::ResponseError;
+use actix_web::http::header;
 use actix_web::web::{Data, Json};
 use actix_web::{Error, FromRequest, HttpRequest, HttpResponse};
 use futures::future::ok;
@@ -40,6 +39,10 @@ pub fn sign_in(
     })
 }
 
+pub fn require_login(acc: LoggedAccount) -> impl Future<Item = HttpResponse, Error = Error> {
+    ok(HttpResponse::Ok().body(acc.0.to_string()))
+}
+
 #[derive(Debug)]
 pub struct LoggedAccount(i64);
 
@@ -49,8 +52,9 @@ impl FromRequest for LoggedAccount {
     type Config = ();
 
     fn from_request(req: &HttpRequest, pl: &mut Payload) -> Self::Future {
-        if let Some(identity) = Identity::from_request(req, pl)?.identity() {
-            let uid = jwt::decode(&identity)?;
+        if let Some(token) = req.headers().get(header::AUTHORIZATION) {
+            let token_str = token.to_str().map_err(|_| ServiceError::Unauthorized)?;
+            let uid = jwt::decode(token_str)?;
             let uid = hashid::decode(&uid)?;
             return Ok(LoggedAccount(uid));
         }
