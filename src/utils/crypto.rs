@@ -38,6 +38,7 @@ pub mod jwt {
     use chrono::{Duration, Local};
     use jsonwebtoken::{Header, Validation};
     use serde_derive::{Deserialize, Serialize};
+
     // jwt Token auth: Claim, token
     #[derive(Debug, Serialize, Deserialize)]
     pub struct Claims {
@@ -49,13 +50,13 @@ pub mod jwt {
         // issued at
         pub exp: i64,
         // expiry
-        pub uid: i64,
+        pub uid: String,
         // user id
     }
 
     // claims's constructor
     impl Claims {
-        pub fn new(uid: i64) -> Self {
+        pub fn new(uid: String) -> Self {
             Claims {
                 iss: "rust_blog".into(),
                 sub: "auth".into(),
@@ -66,16 +67,16 @@ pub mod jwt {
         }
     }
 
-    pub fn encode_token(id: i64) -> Result<String, ServiceError> {
-        let claims = Claims::new(id);
+    pub fn encode(id: &str) -> Result<String, ServiceError> {
+        let claims = Claims::new(id.into());
         jsonwebtoken::encode(&Header::default(), &claims, SECRET_KEY.as_ref())
             .map_err(|_err| ServiceError::InternalServerError("encode".into()))
     }
 
-    pub fn decode_token(token: &str) -> Result<i64, ServiceError> {
-        jsonwebtoken::decode::<Claims>(token, SECRET_KEY.as_ref(), &Validation::default())
-            .map(|data| Ok(data.claims.uid))
-            .map_err(|_err| ServiceError::Unauthorized)?
+    pub fn decode(token: &str) -> Result<String, ServiceError> {
+        let data =
+            jsonwebtoken::decode::<Claims>(token, SECRET_KEY.as_ref(), &Validation::default())?;
+        Ok(data.claims.uid)
     }
 }
 
