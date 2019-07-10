@@ -1,6 +1,6 @@
 use crate::database::DbAddr;
 use crate::models::account::{AccountSignIn, AccountSignInResp, AccountSignUp};
-use crate::utils::crypto::{encode_token, hashid_decode};
+use crate::utils::crypto::hashid;
 use actix_web::error::ResponseError;
 use actix_web::web::{Data, Json};
 use actix_web::{Error, HttpResponse};
@@ -27,7 +27,7 @@ pub fn sign_in(
     db.send(req).from_err().and_then(|resp| match resp {
         Ok(account) => {
             let resp = AccountSignInResp {
-                token: encode_token(hashid_decode(&account.id)?)?,
+                token: hashid::encode(hashid::decode(&account.id)?)?,
                 account,
             };
             Ok(HttpResponse::Ok().json(resp))

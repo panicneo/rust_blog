@@ -1,6 +1,6 @@
 use crate::database::DbPool;
 use crate::models::account::{Account, AccountItem, AccountSignIn, AccountSignUp};
-use crate::utils::crypto::{hash_password, verify_password};
+use crate::utils::crypto::argon2;
 use crate::utils::errors::ServiceError;
 use actix::Handler;
 use diesel::prelude::*;
@@ -12,7 +12,7 @@ impl Handler<AccountSignUp> for DbPool {
         use crate::schema::accounts::dsl::*;
 
         let conn = &self.0.get()?;
-        let hashed = hash_password(&msg.password)?;
+        let hashed = argon2::hash_password(&msg.password)?;
         let account: Account = diesel::insert_into(accounts)
             .values((email.eq(&msg.email), password.eq(hashed)))
             .get_result(conn)?;
@@ -29,8 +29,7 @@ impl Handler<AccountSignIn> for DbPool {
         let account = accounts
             .filter(email.eq(&msg.email))
             .get_result::<Account>(conn)?;
-        let hashed = hash_password(&msg.password)?;
-        let checked = verify_password(&hashed, &msg.password)?;
+        let checked = argon2::verify_password(&account.password, &msg.password)?;
         if checked {
             Ok(AccountItem::from(account))
         } else {
