@@ -1527,7 +1527,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rust_blog_practice"
+name = "rust_blog"
 version = "0.1.0"
 dependencies = [
  "actix 0.8.3 (registry+https://github.com/rust-lang/crates.io-index)",

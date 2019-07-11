@@ -1,5 +1,5 @@
 [package]
-name = "rust_blog_practice"
+name = "rust_blog"
 version = "0.1.0"
 authors = ["Pengfei Tian <itsneo1990@gmail.com>"]
 edition = "2018"

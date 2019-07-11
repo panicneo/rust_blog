@@ -1,1 +1,1 @@
-# rust_blog_practice
+# rust_blog

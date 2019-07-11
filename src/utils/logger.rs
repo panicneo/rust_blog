@@ -5,7 +5,7 @@ pub fn init() {
 
     //    let file_logger = fern::Dispatch::new()
     //        .level(log::LevelFilter::Info)
-    //        .chain(fern::log_file("rust_blog_practice.log")?);
+    //        .chain(fern::log_file("rust_blog.log")?);
 
     fern::Dispatch::new()
         .format(|out, message, record| {
