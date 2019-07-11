@@ -12,7 +12,7 @@ impl Actor for DbPool {
 
 pub type DbAddr = Addr<DbPool>;
 
-pub fn init_db_pool() -> DbAddr {
+pub fn generate() -> DbAddr {
     let db_url: String = config::must_get("DATABASE_URL");
     let manager = ConnectionManager::<PgConnection>::new(db_url);
     let cpu_num = num_cpus::get();

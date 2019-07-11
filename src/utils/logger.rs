@@ -1,4 +1,4 @@
-pub fn init() -> Result<(), fern::InitError> {
+pub fn init() {
     let console_logger = fern::Dispatch::new()
         .level(log::LevelFilter::Debug)
         .chain(std::io::stdout());
@@ -19,6 +19,6 @@ pub fn init() -> Result<(), fern::InitError> {
             ))
         })
         .chain(console_logger)
-        .apply()?;
-    Ok(())
+        .apply()
+        .unwrap_or_default();
 }

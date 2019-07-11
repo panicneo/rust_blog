@@ -1,4 +1,4 @@
-use crate::schema::accounts;
+use crate::applications::schema::accounts;
 use crate::utils::crypto::hashid;
 use crate::utils::errors::ServiceError;
 use actix::Message;

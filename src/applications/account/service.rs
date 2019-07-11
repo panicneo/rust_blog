@@ -1,5 +1,5 @@
+use super::model::{Account, AccountItem, AccountSignIn, AccountSignUp};
 use crate::database::DbPool;
-use crate::models::account::{Account, AccountItem, AccountSignIn, AccountSignUp};
 use crate::utils::crypto::argon2;
 use crate::utils::errors::ServiceError;
 use actix::Handler;
@@ -9,7 +9,7 @@ impl Handler<AccountSignUp> for DbPool {
     type Result = Result<AccountItem, ServiceError>;
 
     fn handle(&mut self, msg: AccountSignUp, _: &mut Self::Context) -> Self::Result {
-        use crate::schema::accounts::dsl::*;
+        use crate::applications::schema::accounts::dsl::*;
 
         let conn = &self.0.get()?;
         let hashed = argon2::hash_password(&msg.password)?;
@@ -24,7 +24,7 @@ impl Handler<AccountSignIn> for DbPool {
     type Result = Result<AccountItem, ServiceError>;
 
     fn handle(&mut self, msg: AccountSignIn, _: &mut Self::Context) -> Self::Result {
-        use crate::schema::accounts::dsl::*;
+        use crate::applications::schema::accounts::dsl::*;
         let conn = &self.0.get()?;
         let account = accounts
             .filter(email.eq(&msg.email))
