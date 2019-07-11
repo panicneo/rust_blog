@@ -1,11 +1,11 @@
-mod account;
+mod auth;
 mod schema;
 
 pub mod router {
-    pub mod account {
-        use super::super::account;
-        pub use account::handler::require_login;
-        pub use account::handler::sign_in;
-        pub use account::handler::sign_up;
+    pub mod auth {
+        use super::super::auth;
+        pub use auth::handler::require_login;
+        pub use auth::handler::sign_in;
+        pub use auth::handler::sign_up;
     }
 }

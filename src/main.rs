@@ -26,18 +26,9 @@ fn main() -> std::io::Result<()> {
             .wrap(Compress::default())
             .service(
                 web::scope("/api")
-                    .route(
-                        "/auth/sign_up",
-                        web::post().to_async(router::account::sign_up),
-                    )
-                    .route(
-                        "/auth/sign_in",
-                        web::post().to_async(router::account::sign_in),
-                    )
-                    .route(
-                        "/logined",
-                        web::get().to_async(router::account::require_login),
-                    ),
+                    .route("/auth/sign_up", web::post().to_async(router::auth::sign_up))
+                    .route("/auth/sign_in", web::post().to_async(router::auth::sign_in))
+                    .route("/logined", web::get().to_async(router::auth::require_login)),
             )
     })
     .bind(&bind_host)
