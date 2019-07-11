@@ -1,6 +1,5 @@
 use crate::schema::categories;
 use chrono::NaiveDateTime;
-
 #[derive(Queryable, Debug, Insertable)]
 #[table_name = "categories"]
 pub struct Category {
@@ -10,6 +9,7 @@ pub struct Category {
     pub updated_at: NaiveDateTime,
 }
 
+#[allow(dead_code)]
 #[derive(Queryable, Debug)]
 pub struct Post {
     pub id: i64,
@@ -21,6 +21,7 @@ pub struct Post {
     pub updated_at: NaiveDateTime,
 }
 
+#[allow(dead_code)]
 #[derive(Queryable, Debug)]
 pub struct Tag {
     pub id: i64,

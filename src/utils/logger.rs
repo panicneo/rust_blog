@@ -3,9 +3,9 @@ pub fn init() -> Result<(), fern::InitError> {
         .level(log::LevelFilter::Debug)
         .chain(std::io::stdout());
 
-    let file_logger = fern::Dispatch::new()
-        .level(log::LevelFilter::Info)
-        .chain(fern::log_file("rust_blog_practice.log")?);
+    //    let file_logger = fern::Dispatch::new()
+    //        .level(log::LevelFilter::Info)
+    //        .chain(fern::log_file("rust_blog_practice.log")?);
 
     fern::Dispatch::new()
         .format(|out, message, record| {
@@ -19,7 +19,6 @@ pub fn init() -> Result<(), fern::InitError> {
             ))
         })
         .chain(console_logger)
-        //        .chain(file_logger)
         .apply()?;
     Ok(())
 }

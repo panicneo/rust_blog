@@ -29,8 +29,7 @@ impl Handler<AccountSignIn> for DbPool {
         let account = accounts
             .filter(email.eq(&msg.email))
             .get_result::<Account>(conn)?;
-        let checked = argon2::verify_password(&account.password, &msg.password)?;
-        if checked {
+        if argon2::verify_password(&account.password, &msg.password)? {
             Ok(AccountItem::from(account))
         } else {
             Err(ServiceError::BadRequest("auth error".to_string()))

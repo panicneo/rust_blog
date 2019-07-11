@@ -51,7 +51,7 @@ impl FromRequest for LoggedAccount {
     type Future = Result<LoggedAccount, Error>;
     type Config = ();
 
-    fn from_request(req: &HttpRequest, pl: &mut Payload) -> Self::Future {
+    fn from_request(req: &HttpRequest, _: &mut Payload) -> Self::Future {
         if let Some(token) = req.headers().get(header::AUTHORIZATION) {
             let token_str = token.to_str().map_err(|_| ServiceError::Unauthorized)?;
             let uid = jwt::decode(token_str)?;
