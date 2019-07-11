@@ -1,5 +1,8 @@
 /target
 **/*.rs.bk
 
+.env
 *.log
+
 .idea
+.vscode
